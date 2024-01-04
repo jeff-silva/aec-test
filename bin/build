@@ -1,4 +1,4 @@
 reset
 rm -rf ./docs
-docker-compose run --rm frontend yarn generate
+docker-compose run --rm frontend yarn build
 cp -r ./frontend/.output/public ./docs
