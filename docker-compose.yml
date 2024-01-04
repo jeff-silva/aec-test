@@ -1,0 +1,15 @@
+version: "3"
+services:
+  frontend:
+    image: node:21.1.0
+    working_dir: /usr/src/app
+    command: bash -c "yarn install && yarn dev"
+    ports:
+      - ${NEXT_PORT:-3000}:3000
+    volumes:
+      - ./frontend:/usr/src/app
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+      - HOST=${NUXT_HOST:-0.0.0.0}
+      - PORT=${NEXT_PORT:-3000}

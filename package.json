@@ -1,0 +1,9 @@
+{
+  "name": "react-next-test",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "dev": "bash bin/dev",
+    "build": "bash bin/build"
+  }
+}
