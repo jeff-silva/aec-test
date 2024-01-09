@@ -76,3 +76,8 @@ Boa sorte!
 [ ] - Interface: shop_products list/grid
 [ ] - Interface: shop_categories filter
 [ ] - Interface: shop_cart
+
+[ ] - Corrigir bugs de tipagens
+[ ] - Ao remover item não calcula total certo
+[ ] - Permitir campo de busca textual
+[ ] - Permitir campo de busca por categoria

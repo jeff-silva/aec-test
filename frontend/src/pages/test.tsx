@@ -1,9 +1,11 @@
 import Head from 'next/head';
 
 import { useContext, useEffect } from 'react';
+import Image from 'next/image';
+
 import { CartContext } from '@/contexts/CartContext';
 import useProductsRequest from '@/hooks/useProductsRequest';
-import Image from 'next/image';
+import ProductCard from '@/components/product/card';
 
 export default function Test() {
   const cart = useContext(CartContext);
@@ -28,34 +30,7 @@ export default function Test() {
             <div className="">
               <div className="grid grid-cols-3 gap-4">
                 {products.response.results.map((prod) => (
-                  <div className="border rounded overflow-hidden" key={prod.id}>
-                    <div className="mx-5" style={{
-                      height: '200px',
-                      background: `url(${prod.thumbnail}) center center no-repeat`,
-                      backgroundSize: 'cover',
-                    }} />
-                    <div className="p-3">{prod.title}</div>
-
-                    {
-                      cart.itemFind(prod) ?
-                      (
-                        <button
-                          className="w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4"
-                          onClick={(ev) => cart.itemAdd(prod)}
-                        >
-                          Remove
-                        </button>
-                      ):
-                      (
-                        <button
-                          className="w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4"
-                          onClick={(ev) => cart.itemAdd(prod)}
-                        >
-                          Add
-                        </button>
-                      )
-                    }
-                  </div>
+                  <ProductCard product={prod} key={prod.id} />
                 ))}
               </div>
             </div>
@@ -81,10 +56,8 @@ export default function Test() {
                           type="number"
                           value={item.quantity}
                           onChange={(ev) => {
-                            const itemsNew = [...cart.items];
-                            itemsNew[itemIndex].quantity = ev.target.value;
-                            cart.setItems(itemsNew);
-                            cart.totalUpdate();
+                            item.quantity = ev.target.value;
+                            cart.itemUpdate(item);
                           }}
                         />
                       </td>
@@ -92,7 +65,7 @@ export default function Test() {
                       <td className="border px-4 py-2">
                         <button
                           className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                          onClick={(ev) => cart.itemRemove(item)}
+                          onClick={(ev) => cart.itemRemove(item.product)}
                         >
                           Remove
                         </button>
@@ -110,23 +83,6 @@ export default function Test() {
                 </tbody>
               </table>
             </div>
-          </div>
-          <br />
-
-          <div className="flex gap-2">
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={(ev) => {
-              cart.itemAdd({ id: 123, name: '123', price: 123 });
-            }}
-            >
-              add 123
-            </button>
-            
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={(ev) => {
-              cart.itemAdd({ id: 456, name: '456', price: 456 });
-            }}
-            >
-              add 456
-            </button>
           </div>
           <br />
 

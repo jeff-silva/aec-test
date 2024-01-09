@@ -25,6 +25,16 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
     return items.find(o => o.product.id == product.id);
   };
 
+  const itemUpdate = (item) => {
+    const itemsNew = items.map((currentItem) => {
+      if (currentItem.product.id != item.product.id) return currentItem;
+      return item;
+    });
+
+    setItems(itemsNew);
+    totalUpdate();
+  };
+
   const itemAdd = (product, quantity=1) => {
     if (!itemFind(product)) {
       items.push({ quantity: 0, product });
@@ -39,8 +49,8 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
     totalUpdate();
   };
 
-  const itemRemove = (item) => {
-    setItems(items.filter(o => o.product.id != item.product.id));
+  const itemRemove = (product) => {
+    setItems(items.filter(o => o.product.id != product.id));
     totalUpdate();
   };
 
@@ -56,6 +66,7 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
       items,
       setItems,
       itemFind,
+      itemUpdate,
       itemAdd,
       itemRemove,
       itemsClear,
