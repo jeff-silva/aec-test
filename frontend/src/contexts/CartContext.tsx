@@ -2,7 +2,7 @@ import React, { createContext, useState } from 'react';
 
 type CartProductProps = {
   id: string,
-  name: string,
+  title: string,
   price: number,
 };
 
@@ -21,12 +21,12 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
     }, 0));
   };
 
-  const itemFind = (item) => {
-    return items.find(o => o.product.id == item.product.id);
+  const itemFind = (product) => {
+    return items.find(o => o.product.id == product.id);
   };
 
   const itemAdd = (product, quantity=1) => {
-    if (!itemFind({ quantity, product })) {
+    if (!itemFind(product)) {
       items.push({ quantity: 0, product });
     }
 
@@ -51,8 +51,10 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <CartContext.Provider value={{
       total,
+      setTotal,
       totalUpdate,
       items,
+      setItems,
       itemFind,
       itemAdd,
       itemRemove,
