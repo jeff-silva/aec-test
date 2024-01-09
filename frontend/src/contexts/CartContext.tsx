@@ -21,7 +21,7 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.setItem('cart-items', JSON.stringify(data));
   };
 
-  const totalUpdate = () => {
+  const totalUpdate = (items = []) => {
     setTotal(items.reduce((total, o) => {
       return total + (o.product.price * o.quantity);
     }, 0));
@@ -40,7 +40,7 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
     setItems(itemsNew);
     storageSave(itemsNew);
-    totalUpdate();
+    totalUpdate(itemsNew);
   };
 
   const itemAdd = (product, quantity=1) => {
@@ -56,7 +56,8 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
     setItems(itemsNew);
     storageSave(itemsNew);
-    totalUpdate();
+    totalUpdate(itemsNew);
+    setDrawer(true);
   };
 
   const itemRemove = async (product) => {
@@ -78,14 +79,14 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
       const itemsNew = [...items.filter(o => o.product.id != product.id)];
       setItems(itemsNew);
       storageSave(itemsNew);
-      totalUpdate();
+      totalUpdate(itemsNew);
     }
   };
 
   const itemsClear = () => {
     setItems([]);
     storageSave([]);
-    totalUpdate();
+    totalUpdate([]);
   };
 
   const drawerToggle = () => {
@@ -100,7 +101,6 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
     <CartContext.Provider value={{
       total,
       setTotal,
-      totalUpdate,
       items,
       setItems,
       itemFind,

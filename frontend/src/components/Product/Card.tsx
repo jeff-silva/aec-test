@@ -16,17 +16,41 @@ const ProductCard = ({ product, layout='vertical' }) => {
         key={product.id}
         className="flex items-center gap-3 rounded overflow-hidden"
       >
-        <div style={{
-          minWidth: '80px',
-          maxWidth: '80px',
-          height: '130px',
-          background: `url(${product.thumbnail}) center center no-repeat`,
-          backgroundSize: 'contain',
-        }} />
+        <Link
+          href={`/product/${product.id}`}
+          style={{
+            minWidth: '80px',
+            maxWidth: '80px',
+            height: '130px',
+            background: `url(${product.thumbnail}) center center no-repeat`,
+            backgroundSize: 'contain',
+          }}
+        />
   
         <div className="grow">
-          <div className="font-bold">{product.title}</div>
-          <div className="">{format.money(product.price)}</div>
+          <Link href={`/product/${product.id}`} className="font-bold">{product.title}</Link>
+          
+          <div className="flex items-center gap-2 mt-2">
+            <div className="grow text-green-500 font-bold">{format.money(product.price)}</div>
+
+            {cartItem && (
+              <div className="grow flex gap-1 border p-1 rounded" style={{ maxWidth: 120 }}>
+                <input
+                  type="number"
+                  className="w-full"
+                  value={cartItem.quantity}
+                  onChange={(ev) => {
+                    cartItem.quantity = ev.target.value;
+                    cart.itemUpdate(cartItem);
+                  }}
+                />
+
+                <button type="button" onClick={(ev) => cart.itemRemove(product)}>
+                  <Icon icon="material-symbols:delete-forever" height="23" className="text-red-900" />
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     );
@@ -53,9 +77,9 @@ const ProductCard = ({ product, layout='vertical' }) => {
         }}
       />
 
-      <Link href={`/product/${product.id}`} className="p-3">{product.title}</Link>
+      <Link href={`/product/${product.id}`} className="p-3 font-bold">{product.title}</Link>
       
-      <div className="p-3 text-center">{format.money(product.price)}</div>
+      <div className="p-3 text-center text-green-500 font-bold">{format.money(product.price)}</div>
 
       {cartItem && (
         <div className="flex">

@@ -6,7 +6,7 @@ const useProductsRequest = () => {
 
   const [params, setParams] = useState({
     q: 'notebook',
-    limit: 6,
+    limit: 20,
   });
 
   const [response, setResponse] = useState({
