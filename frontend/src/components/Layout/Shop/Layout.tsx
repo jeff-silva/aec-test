@@ -10,9 +10,18 @@ const ShopLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div>
-      <div className="shadow-lg">
+      <div
+        className="shadow-lg bg-white"
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+        }}
+      >
         <div className="container mx-auto py-3 flex items-center gap-3">
           <Link href="/">Shop</Link>
+          <Link href="/product">Busca</Link>
 
           <div className="grow"></div>
 
@@ -24,9 +33,22 @@ const ShopLayout = ({ children }: { children: React.ReactNode }) => {
           </button>
         </div>
       </div>
-      <br />
+      
+      <br /><br /><br />
 
-      <main>{children}</main>
+      <main
+        style={{ minHeight: '85vh' }}
+      >
+        {children}
+      </main>
+
+      <br /><br />
+
+      <div className="bg-gray-800 text-white">
+        <div className="container mx-auto py-6">
+          &copy; 2024 - Todos os direitos reservados
+        </div>
+      </div>
 
       <ShopCartDrawer />
     </div>

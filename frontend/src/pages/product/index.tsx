@@ -3,6 +3,7 @@ import Head from 'next/head';
 import { useContext, useEffect } from 'react';
 import Image from 'next/image';
 import { Icon } from '@iconify/react';
+import { useRouter } from 'next/router';
 
 import { CartContext } from '@/contexts/CartContext';
 import useProductsRequest from '@/hooks/useProductsRequest';
@@ -10,12 +11,13 @@ import ProductCard from '@/components/Product/Card';
 
 export default function Test() {
   const cart = useContext(CartContext);
-
   const products = useProductsRequest();
+  const router = useRouter();
 
   useEffect(() => {
+    products.paramsUpdate(router.query);
     products.submit();
-  }, []);
+  }, [ router ]);
 
   return (
     <>
@@ -72,6 +74,7 @@ export default function Test() {
                 onSubmit={(ev) => {
                   ev.preventDefault();
                   products.submit();
+                  router.push({ query: products.params });
                 }}
               >
                 <div className="flex items-center border">

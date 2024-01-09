@@ -45,7 +45,7 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
   const itemAdd = (product, quantity=1) => {
     if (!itemFind(product)) {
-      items.push({ quantity: 0, product });
+      items.unshift({ quantity: 0, product });
     }
 
     const itemsNew = items.map(item => {
@@ -94,7 +94,9 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   useEffect(() => {
-    setItems(JSON.parse(localStorage.getItem('cart-items') || '[]'));
+    const itemsNew = JSON.parse(localStorage.getItem('cart-items') || '[]');
+    setItems(itemsNew);
+    totalUpdate(itemsNew);
   }, []);
 
   return (

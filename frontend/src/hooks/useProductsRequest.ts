@@ -19,6 +19,10 @@ const useProductsRequest = () => {
     results: [],
   });
 
+  const paramsUpdate = (paramsNew) => {
+    setParams({ ...params, ...paramsNew });
+  };
+
   const submit = async () => {
     setBusy(true);
 
@@ -35,6 +39,7 @@ const useProductsRequest = () => {
           title: prod.title,
           price: prod.price,
           thumbnail: prod.thumbnail,
+          pictures: prod.pictures,
         };
       });
 
@@ -49,6 +54,7 @@ const useProductsRequest = () => {
   return {
     busy,
     params,
+    paramsUpdate,
     setParams,
     response,
     submit,

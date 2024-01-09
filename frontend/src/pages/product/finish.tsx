@@ -7,7 +7,7 @@ export default function Test() {
         <title>Produto</title>
       </Head>
 
-      <main>
+      <main className="container mx-auto">
         Finish
       </main>
     </>
