@@ -1,13 +1,20 @@
 import { useState } from 'react';
 import axios from 'axios';
 
-const useProductsRequest = () => {
-  const [busy, setBusy] = useState(false);
+const useProductsRequest = (options = {}) => {
+  options = {
+    params: {},
+    ...options
+  };
 
-  const [params, setParams] = useState({
-    q: 'notebook',
+  options.params = {
+    q: '',
     limit: 20,
-  });
+    ...options.params
+  };
+
+  const [busy, setBusy] = useState(false);
+  const [params, setParams] = useState(options.params);
 
   const [response, setResponse] = useState({
     paging: {

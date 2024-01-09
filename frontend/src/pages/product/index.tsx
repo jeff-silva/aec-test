@@ -1,7 +1,6 @@
 import Head from 'next/head';
 
 import { useContext, useEffect } from 'react';
-import Image from 'next/image';
 import { Icon } from '@iconify/react';
 import { useRouter } from 'next/router';
 
@@ -11,11 +10,13 @@ import ProductCard from '@/components/Product/Card';
 
 export default function Test() {
   const cart = useContext(CartContext);
-  const products = useProductsRequest();
   const router = useRouter();
+  const products = useProductsRequest({
+    params: router.query,
+  });
 
   useEffect(() => {
-    products.paramsUpdate(router.query);
+    // products.paramsUpdate(router.query);
     products.submit();
   }, [ router ]);
 
@@ -29,12 +30,13 @@ export default function Test() {
         <br />
 
         <div className="container mx-auto">
-          <div className="grid grid-cols-4">
+          <div className="grid grid-cols-4 gap-3">
             
             {/* Search Results */}
             <div className="col-span-3">
-              <div className="flex flex-wrap gap-4">
+              <div className="grid grid-cols-4 gap-3">
 
+                {/* Skeleton */}
                 {products.busy && (
                   <>
                     {[...new Array(6)].map((n, i) => (
@@ -42,7 +44,6 @@ export default function Test() {
                         key={i}
                         className="border p-3 animate-pulse"
                         style={{
-                          width: 250,
                           height: 350,
                         }}
                       >
@@ -58,11 +59,11 @@ export default function Test() {
                   </>
                 )}
 
-                {!products.busy && products.response.results.map((prod) => (
+                {/* Products List */}
+                {products.response.results.map((prod) => (
                   <ProductCard
                     key={prod.id}
                     product={prod}
-                    layout={'vertical'}
                   />
                 ))}
               </div>

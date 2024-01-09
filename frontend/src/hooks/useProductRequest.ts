@@ -3,7 +3,6 @@ import axios from 'axios';
 
 const useProductRequest = () => {
   const [busy, setBusy] = useState(false);
-
   const [response, setResponse] = useState(false);
 
   const load = async (id = null) => {

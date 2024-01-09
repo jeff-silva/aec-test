@@ -1,20 +1,40 @@
 import Head from 'next/head';
+import Link from 'next/link';
 
-import { useContext, useEffect } from 'react';
-import Image from 'next/image';
-import { Icon } from '@iconify/react';
+import { useEffect } from 'react';
 
-import { CartContext } from '@/contexts/CartContext';
 import useProductsRequest from '@/hooks/useProductsRequest';
 import ProductCard from '@/components/Product/Card';
 
 export default function Test() {
-  const cart = useContext(CartContext);
 
-  const products = useProductsRequest();
+  const lists = [
+    {
+      title: 'Imóveis',
+      href: '/product?q=Imóveis',
+      params: { limit: 10, q: 'Imóveis' },
+    },
+    {
+      title: 'Veículos',
+      href: '/product?q=Veículos',
+      params: { limit: 10, q: 'Veículos' },
+    },
+    {
+      title: 'Brinquedos',
+      href: '/product?q=Brinquedos',
+      params: { limit: 10, q: 'Brinquedos' },
+    },
+  ].map((list) => {
+    list.request = useProductsRequest({
+      params: list.params,
+    });
+    return list;
+  });
 
   useEffect(() => {
-    products.submit();
+    lists.map((list) => {
+      list.request.submit();
+    });
   }, []);
 
   return (
@@ -24,80 +44,32 @@ export default function Test() {
       </Head>
 
       <main>
-        <br />
-
         <div className="container mx-auto">
-          <div className="grid grid-cols-4">
-            
-            {/* Search Results */}
-            <div className="col-span-3">
-              <div className="flex flex-wrap gap-4">
 
-                {products.busy && (
-                  <>
-                    {[...new Array(6)].map((n, i) => (
-                      <div
-                        key={i}
-                        className="border p-3 animate-pulse"
-                        style={{
-                          width: 250,
-                          height: 350,
-                        }}
-                      >
-                        <Icon icon="material-symbols:image-rounded" className="mx-auto text-gray-200" height="140" />
-                        <br />
-                        <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
-                        <br />
-                        <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[480px] mb-2.5"></div>
-                        <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
-                        <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[440px] mb-2.5"></div>
-                      </div>
-                    ))}
-                  </>
-                )}
-
-                {!products.busy && products.response.results.map((prod) => (
-                  <ProductCard
-                    key={prod.id}
-                    product={prod}
-                    layout={'vertical'}
-                  />
-                ))}
-              </div>
-            </div>
-
-            {/* Search Filters */}
-            <div className="col-span-1">
-              <form
-                onSubmit={(ev) => {
-                  ev.preventDefault();
-                  products.submit();
-                }}
+          <div className="flex flex-col gap-10">
+            {lists.map((list, listIndex) => (
+              <div
+                key={listIndex}
+                className=""
               >
-                <div className="flex items-center border">
-                  <input
-                    type="text"
-                    className="grow p-3"
-                    value={products.params.q}
-                    onInput={(ev) => {
-                      products.paramsUpdate({
-                        q: ev.target.value,
-                      });
-                    }}
-                  />
-                  <button type="button" className="px-2">
-                    <Icon icon="material-symbols:search" height="30" />
-                  </button>
-                </div>
-              </form>
+                <Link href={list.href} className="text-xl font-bold uppercase">{list.title}</Link>
+                <br /><br />
 
-              <pre dangerouslySetInnerHTML={{ __html: JSON.stringify(products, null, 2) }} />
-            </div>
+                <div className="flex gap-3 overflow-auto">
+                  {list.request.response.results.map((prod) => (
+                    <div
+                      key={prod.id}
+                      style={{ minWidth: 250 }}
+                    >
+                      <ProductCard product={prod} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
 
-          
-
-          {/* <pre dangerouslySetInnerHTML={{ __html: JSON.stringify(cart, null, 2) }} /> */}
+          {/* <pre dangerouslySetInnerHTML={{ __html: JSON.stringify(lists, null, 2) }} /> */}
         </div>
       </main>
     </>

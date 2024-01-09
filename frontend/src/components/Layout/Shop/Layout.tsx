@@ -20,8 +20,7 @@ const ShopLayout = ({ children }: { children: React.ReactNode }) => {
         }}
       >
         <div className="container mx-auto py-3 flex items-center gap-3">
-          <Link href="/">Shop</Link>
-          <Link href="/product">Busca</Link>
+          <Link href="/">Home</Link>
 
           <div className="grow"></div>
 
@@ -33,11 +32,9 @@ const ShopLayout = ({ children }: { children: React.ReactNode }) => {
           </button>
         </div>
       </div>
-      
-      <br /><br /><br />
 
       <main
-        style={{ minHeight: '85vh' }}
+        style={{ marginTop: 100, minHeight: '85vh' }}
       >
         {children}
       </main>

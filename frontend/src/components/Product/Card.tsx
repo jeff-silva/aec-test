@@ -61,8 +61,8 @@ const ProductCard = ({ product, layout='vertical' }) => {
       key={product.id}
       className="flex flex-col rounded border overflow-hidden"
       style={{
-        minWidth: '250px',
-        maxWidth: '250px',
+        // minWidth: '250px',
+        // maxWidth: '250px',
         height: '350px',
       }}
     >
