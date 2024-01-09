@@ -1,16 +1,17 @@
 import React, { useContext } from 'react';
 import { Icon } from '@iconify/react';
+import Link from 'next/link';
 
 import { CartContext } from '@/contexts/CartContext';
-import ProductCardH from '@/components/product/cardH';
+import ProductCard from '@/components/Product/Card';
 
-const ShopCartDrawer = ({ open=false, setOpen=()=>{} }) => {
+const ShopCartDrawer = ({ }) => {
   const cart = useContext(CartContext);
+  const drawerWidth = 400;
 
   return (
     <div>
       <div
-        // className={`${open ? 'opacity-100' : 'opacity-0'} transition-opacity ease-in duration-300`}
         style={{
           background: '#00000011',
           position: 'fixed',
@@ -20,13 +21,13 @@ const ShopCartDrawer = ({ open=false, setOpen=()=>{} }) => {
           height: '100vh',
           zIndex: 9,
           cursor: 'pointer',
-          visibility: open ? 'visible' : 'hidden',
-          opacity: open ? 1 : 0,
+          visibility: cart.drawer ? 'visible' : 'hidden',
+          opacity: cart.drawer ? 1 : 0,
           transition: 'all 300ms ease',
         }}
         onClick={(ev) => {
           if (ev.currentTarget != ev.target) return;
-          setOpen(false);
+          cart.drawerToggle(false);
         }}
       >
         <div
@@ -34,35 +35,45 @@ const ShopCartDrawer = ({ open=false, setOpen=()=>{} }) => {
           style={{
             position: 'fixed',
             top: 0,
-            right: open ? 0 : -300,
-            width: '300px',
+            right: cart.drawer ? 0 : -drawerWidth,
+            width: `${drawerWidth}px`,
             height: '100vh',
+            maxWidth: '90vw',
             cursor: 'default',
             transition: 'all 300ms ease',
           }}
         >
           <div className="p-3 bg-gray-200 flex items-center">
             <div className="grow">Cart</div>
-            <button type="button" onClick={() => setOpen(!open)}>
+            <button type="button" onClick={() => cart.drawerToggle()}>
               <Icon icon="material-symbols:close" />
             </button>
           </div>
 
-          <div className="p-3 grow">
+          <div className="p-3 grow overflow-auto">
             <div className="flex flex-col gap-3">
               {cart.items.map((item, itemIndex) => (
                 <div className="" key={item.product.id}>
-                  <ProductCardH product={item.product} />
+                  <ProductCard
+                    key={item.product.id}
+                    product={item.product}
+                    layout={'horizontal'}
+                  />
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="p-3 border-t">Footer</div>
+          <div className="p-3 border-t">
+            <Link
+              href="/product/finish"
+              className="w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+            >
+              Finalizar
+            </Link>
+          </div>
         </div>
       </div>
-      {/* {open && (
-      )} */}
     </div>
   );
 };

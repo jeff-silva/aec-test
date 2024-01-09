@@ -1,21 +1,24 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import { Icon } from '@iconify/react';
+import Link from 'next/link';
+
 import ShopCartDrawer from './CartDrawer';
+import { CartContext } from '@/contexts/CartContext';
 
 const ShopLayout = ({ children }: { children: React.ReactNode }) => {
-  const [ open, setOpen ] = useState(true);
+  const cart = useContext(CartContext);
 
   return (
     <div>
       <div className="shadow-lg">
         <div className="container mx-auto py-3 flex items-center gap-3">
-          <div>Shop</div>
+          <Link href="/">Shop</Link>
 
           <div className="grow"></div>
 
           <button
             type="button"
-            onClick={() => setOpen(!open)}
+            onClick={() => cart.drawerToggle()}
           >
             <Icon icon="material-symbols-light:shopping-bag" height="30" />
           </button>
@@ -25,10 +28,7 @@ const ShopLayout = ({ children }: { children: React.ReactNode }) => {
 
       <main>{children}</main>
 
-      <ShopCartDrawer
-        open={open}
-        setOpen={setOpen}
-      />
+      <ShopCartDrawer />
     </div>
   );
 };

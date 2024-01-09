@@ -15,6 +15,7 @@ const CartContext = createContext({
 const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [total, setTotal] = useState(0);
   const [items, setItems] = useState([]);
+  const [drawer, setDrawer] = useState(false);
 
   const storageSave = (data) => {
     localStorage.setItem('cart-items', JSON.stringify(data));
@@ -87,6 +88,10 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
     totalUpdate();
   };
 
+  const drawerToggle = () => {
+    setDrawer(!drawer);
+  };
+
   useEffect(() => {
     setItems(JSON.parse(localStorage.getItem('cart-items') || '[]'));
   }, []);
@@ -103,6 +108,8 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
       itemAdd,
       itemRemove,
       itemsClear,
+      drawer,
+      drawerToggle,
     }}>
       {children}
     </CartContext.Provider>

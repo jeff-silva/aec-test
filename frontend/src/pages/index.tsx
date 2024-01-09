@@ -5,8 +5,7 @@ import Image from 'next/image';
 
 import { CartContext } from '@/contexts/CartContext';
 import useProductsRequest from '@/hooks/useProductsRequest';
-import ProductCardH from '@/components/product/cardH';
-import ProductCardV from '@/components/product/cardV';
+import ProductCard from '@/components/Product/Card';
 
 export default function Test() {
   const cart = useContext(CartContext);
@@ -29,7 +28,11 @@ export default function Test() {
         <div className="container mx-auto">
           <div className="flex flex-wrap gap-4">
             {products.response.results.map((prod) => (
-              <ProductCardV product={prod} key={prod.id} />
+              <ProductCard
+                key={prod.id}
+                product={prod}
+                layout={'vertical'}
+              />
             ))}
           </div>
 

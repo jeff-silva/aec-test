@@ -1,14 +1,36 @@
 import React, { useContext } from "react";
+import { Icon } from '@iconify/react';
 import Link from 'next/link';
 
 import { CartContext } from '@/contexts/CartContext';
-import { Icon } from '@iconify/react';
 import useFormat from "@/hooks/useFormat";
 
-const ProductCardV = ({ product }) => {
+const ProductCard = ({ product, layout='vertical' }) => {
   const cart = useContext(CartContext);
   const cartItem = cart.itemFind(product);
   const format = useFormat();
+
+  if (layout == 'horizontal') {
+    return (
+      <div
+        key={product.id}
+        className="flex items-center gap-3 rounded overflow-hidden"
+      >
+        <div style={{
+          minWidth: '80px',
+          maxWidth: '80px',
+          height: '130px',
+          background: `url(${product.thumbnail}) center center no-repeat`,
+          backgroundSize: 'contain',
+        }} />
+  
+        <div className="grow">
+          <div className="font-bold">{product.title}</div>
+          <div className="">{format.money(product.price)}</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -68,4 +90,4 @@ const ProductCardV = ({ product }) => {
   );
 };
 
-export default ProductCardV;
+export default ProductCard;
