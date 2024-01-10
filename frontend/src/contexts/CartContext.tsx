@@ -1,12 +1,19 @@
 import React, { createContext, useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 
-interface CartItemInterface {
+export interface ProductInterface {
+  id: string;
+  title: string;
+  price: number;
+  thumbnail: string;
+}
+
+export interface CartItemInterface {
   quantity: number;
-  product: object;
+  product: ProductInterface;
 };
 
-interface CartInterface {
+export interface CartInterface {
   drawer: boolean;
   items: CartItemInterface[];
   total: number;
@@ -30,20 +37,22 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const totalUpdate = (items = []) => {
-    setTotal(items.reduce((total, o) => {
+    setTotal(items.reduce((total, o: CartItemInterface) => {
       return total + (o.product.price * o.quantity);
     }, 0));
   };
 
-  const itemFind = (product = false) => {
+  const itemFind = (product: ProductInterface | false = false) => {
     if (!product) return null;
-    return items.find(o => o.product.id == product.id);
+    return items.find((o: CartItemInterface) => {
+      return o.product.id == product.id;
+    });
   };
 
-  const itemUpdate = (item) => {
-    const itemsNew = items.map((currentItem) => {
+  const itemUpdate = (item: CartItemInterface) => {
+    const itemsNew = items.map((currentItem: CartItemInterface) => {
       if (currentItem.product.id != item.product.id) return currentItem;
-      item.quantity = parseInt(item.quantity);
+      item.quantity = +item.quantity;
       return item;
     });
 
