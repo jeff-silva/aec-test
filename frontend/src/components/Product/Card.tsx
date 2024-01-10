@@ -32,12 +32,11 @@ const ProductCard = ({ product, layout='vertical' }) => {
           <Link
             href={`/product/${product.id}`}
             className="block font-bold text-ellipsis overflow-hidden"
-            style={{ height: 50 }}
           >
             {product.title}
           </Link>
           
-          <div className="flex items-center gap-2 mt-2">
+          <div className="flex items-center gap-2">
             <div className="grow text-green-500 font-bold">{format.money(product.price)}</div>
 
             {cartItem && (
