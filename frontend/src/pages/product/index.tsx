@@ -66,6 +66,18 @@ export default function Test() {
                     <Icon icon={ products.busy ? 'line-md:loading-loop' : 'material-symbols:search' } height="30" />
                   </button>
                 </div>
+
+                <div className="h-12 bg-gray-200 rounded mt-4"></div>
+                <div className="h-12 bg-gray-200 rounded mt-4"></div>
+                <div className="h-12 bg-gray-200 rounded mt-4"></div>
+                <div className="h-12 bg-gray-200 rounded mt-4"></div>
+
+                <br />
+                <div className="flex justify-end">
+                  <button type="submit" className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                    Buscar
+                  </button>
+                </div>
               </form>
             </div>
             
