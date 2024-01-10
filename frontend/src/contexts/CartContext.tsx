@@ -89,8 +89,8 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
     totalUpdate([]);
   };
 
-  const drawerToggle = () => {
-    setDrawer(!drawer);
+  const drawerToggle = (value=null) => {
+    setDrawer(value===null ? !drawer : value);
   };
 
   useEffect(() => {

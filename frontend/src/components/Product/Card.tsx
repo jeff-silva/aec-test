@@ -10,6 +10,7 @@ const ProductCard = ({ product, layout='vertical' }) => {
   const cartItem = cart.itemFind(product);
   const format = useFormat();
 
+  // Horizontal
   if (layout == 'horizontal') {
     return (
       <div
@@ -28,7 +29,13 @@ const ProductCard = ({ product, layout='vertical' }) => {
         />
   
         <div className="grow">
-          <Link href={`/product/${product.id}`} className="font-bold">{product.title}</Link>
+          <Link
+            href={`/product/${product.id}`}
+            className="block font-bold text-ellipsis overflow-hidden"
+            style={{ height: 50 }}
+          >
+            {product.title}
+          </Link>
           
           <div className="flex items-center gap-2 mt-2">
             <div className="grow text-green-500 font-bold">{format.money(product.price)}</div>
@@ -56,6 +63,7 @@ const ProductCard = ({ product, layout='vertical' }) => {
     );
   }
 
+  // Vertical
   return (
     <div
       key={product.id}
@@ -77,7 +85,12 @@ const ProductCard = ({ product, layout='vertical' }) => {
         }}
       />
 
-      <Link href={`/product/${product.id}`} className="p-3 font-bold">{product.title}</Link>
+      <Link
+        href={`/product/${product.id}`}
+        className="p-3 font-bold text-ellipsis overflow-hidden whitespace-nowrap"
+      >
+        {product.title}
+      </Link>
       
       <div className="p-3 text-center text-green-500 font-bold">{format.money(product.price)}</div>
 

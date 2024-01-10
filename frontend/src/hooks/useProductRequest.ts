@@ -17,15 +17,18 @@ const useProductRequest = () => {
       });
 
       if (typeof data[0] != 'undefined') {
-        const product = data[0].body;
+        let product = data[0].body;
         if (!product.error) {
-          setResponse({
+          product = {
             id: product.id,
             title: product.title,
             price: product.price,
             thumbnail: product.thumbnail,
             pictures: product.pictures,
-          });
+          };
+          setResponse(product);
+          setBusy(false);
+          return product;
         }
       }
     } catch (error) {

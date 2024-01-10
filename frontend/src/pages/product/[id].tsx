@@ -1,20 +1,29 @@
 import Head from 'next/head';
 import { useEffect } from 'react';
-import { useParams } from 'next/navigation';
 import useProductRequest from '@/hooks/useProductRequest';
 import { useRouter } from 'next/router';
 
+import useProductsRequest from '@/hooks/useProductsRequest';
+import ProductCard from '@/components/Product/Card';
+
 export default function Test() {
   const router = useRouter();
-  const params = useParams();
   const product = useProductRequest();
+
+  const relateds = useProductsRequest({
+    params: { q: 'Automóveis', limit: 6 },
+  });
 
   
   useEffect(() => {
-    // console.log('params:', params);
-    // console.log('query:', router.query.id);
-    product.load(router.query.id);
-  }, [router]);
+    if (!router.query.id) return;
+
+    (async () => {
+      const data = await product.load(router.query.id);
+      relateds.paramsUpdate({ q: data.title });
+      relateds.submit();
+    })();
+  }, [router, router.query]);
 
   return (
     <>
@@ -22,7 +31,7 @@ export default function Test() {
         <title>Produto</title>
       </Head>
 
-      <main className="container mx-auto border">
+      <main className="container mx-auto">
         <div className="border p-4 max-w-sm w-full mx-auto">
           <div className="animate-pulse flex space-x-4">
             <div className="rounded-full bg-slate-200 h-10 w-10"></div>
@@ -46,9 +55,30 @@ export default function Test() {
         {!product.busy && product.response && (
           <div>
             <h1>{product.response.title}</h1>
-            <pre dangerouslySetInnerHTML={{ __html: JSON.stringify(product, null, 2) }} />
+            
+            {/* <pre dangerouslySetInnerHTML={{ __html: JSON.stringify(relateds, null, 2) }} /> */}
           </div>
         )}
+
+        <br />
+        <h2 className="font-bold mb-3">Relacionados</h2>
+        <div
+          className="flex gap-3 overflow-auto"
+        >
+          {relateds.response.results.map((prod) => (
+            <div
+              key={prod.id}
+              style={{
+                minWidth: 250,
+                maxWidth: 250,
+              }}
+            >
+              <ProductCard product={prod} />
+            </div>
+          ))}
+        </div>
+
+        <pre dangerouslySetInnerHTML={{ __html: JSON.stringify(product, null, 2) }} />
       </main>
     </>
   );

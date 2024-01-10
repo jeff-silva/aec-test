@@ -52,14 +52,23 @@ export default function Test() {
                 key={listIndex}
                 className=""
               >
-                <Link href={list.href} className="text-xl font-bold uppercase">{list.title}</Link>
-                <br /><br />
+                <div className="flex items-center gap-3 text-gray-600">
+                  <div href={list.href} className="text-xl font-bold uppercase">{list.title}</div>
+                  <span>|</span>
+                  <Link href={list.href} className="text-xl font-bold">Ver mais</Link>
+                </div>
+                <br />
 
-                <div className="flex gap-3 overflow-auto">
+                <div
+                  className="flex gap-3 overflow-auto"
+                >
                   {list.request.response.results.map((prod) => (
                     <div
                       key={prod.id}
-                      style={{ minWidth: 250 }}
+                      style={{
+                        minWidth: 250,
+                        maxWidth: 250,
+                      }}
                     >
                       <ProductCard product={prod} />
                     </div>

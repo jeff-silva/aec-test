@@ -13,10 +13,7 @@ const useProductsRequest = (options = {}) => {
     ...options.params
   };
 
-  const [busy, setBusy] = useState(false);
-  const [params, setParams] = useState(options.params);
-
-  const [response, setResponse] = useState({
+  const responseDafault = {
     paging: {
       total: 0,
       primary_results: 0,
@@ -24,10 +21,19 @@ const useProductsRequest = (options = {}) => {
       limit: 0,
     },
     results: [],
-  });
+  };
+
+  const [busy, setBusy] = useState(false);
+  const [params, setParams] = useState({ ...options.params });
+
+  const [response, setResponse] = useState(responseDafault);
 
   const paramsUpdate = (paramsNew) => {
-    setParams({ ...params, ...paramsNew });
+    for(let attr in paramsNew) {
+      params[attr] = paramsNew[attr];
+    }
+
+    setParams({ ...params });
   };
 
   const submit = async () => {
@@ -51,8 +57,9 @@ const useProductsRequest = (options = {}) => {
       });
 
       setResponse(data);
+      return data;
     } catch (error) {
-      setResponse({});
+      setResponse(responseDafault);
     } finally {
       setBusy(false);
     }
