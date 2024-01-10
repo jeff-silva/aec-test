@@ -20,12 +20,21 @@ const useProductRequest = () => {
 
       if (typeof data[0] != 'undefined') {
         if (!data[0].body.error) {
-          let product: ProductInterface = data[0].body;
+          let product = data[0].body;
+
+          let description = [];
+
+          product.attributes.map((attr) => {
+            const values = attr.values.map(value => value.name).join(', ');
+            description.push(`<p>${attr.name}: ${values}</p>`);
+          });
+
           product = {
             id: product.id,
             title: product.title,
             price: product.price,
             thumbnail: product.thumbnail,
+            description: description.join('<br />'),
           };
           setResponse(product);
           setBusy(false);

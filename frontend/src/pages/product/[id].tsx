@@ -2,7 +2,6 @@ import Head from 'next/head';
 import { useContext, useEffect, useState } from 'react';
 import useProductRequest from '@/hooks/useProductRequest';
 import { useRouter } from 'next/router';
-import Image from 'next/image';
 
 import useProductsRequest from '@/hooks/useProductsRequest';
 import useFormat from '@/hooks/useFormat';
@@ -21,7 +20,7 @@ export default function Test() {
   const [cartItem, setCartItem] = useState<CartItemInterface | null >(null);
 
   const relateds = useProductsRequest({
-    params: { q: 'Automóveis', limit: 3 },
+    params: { q: 'Automóveis', limit: 6 },
   });
 
   useEffect(() => {
@@ -35,7 +34,7 @@ export default function Test() {
       relateds.paramsUpdate({ q: data.title });
     })();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router.query]);
+  }, [router]);
   
   useEffect(() => {
     let t = setTimeout(() => {
@@ -56,8 +55,8 @@ export default function Test() {
 
       <main className="container mx-auto">
 
-        <div className="grid grid-cols-5 gap-3">
-          <div className="col-span-4">
+        <div className="grid grid-cols-4 gap-6">
+          <div className="col-span-12">
             {!product.busy && !product.response && (
               <div>Produto não encontrado</div>
             )}
@@ -65,7 +64,6 @@ export default function Test() {
             {!product.busy && product.response && (
               <div>
                 <h1 className="font-bold text-3xl">{product.response.title}</h1>
-                <h1 className="font-bold text-2xl text-green-600">{format.money(product.response.price)}</h1>
                 <br />
 
                 <div className="border rounded-md overflow-hidden" style={{ maxWidth: productImageSize }}>
@@ -77,6 +75,8 @@ export default function Test() {
                       background: `url(${product.response.thumbnail}) center center no-repeat`,
                     }}
                   />
+
+                  <div className="font-bold text-2xl text-center py-3 text-green-600 bg-green-100">{format.money(product.response.price)}</div>
 
                   {!cartItem && (
                     <button
@@ -120,18 +120,43 @@ export default function Test() {
                     </div>
                   )}
                 </div>
-                
-                {/* <pre dangerouslySetInnerHTML={{ __html: JSON.stringify(cartItem, null, 2) }} /> */}
+                <br />
+
+                <div dangerouslySetInnerHTML={{ __html: product.response.description }}></div>
+                <br />
+                {/* <pre dangerouslySetInnerHTML={{ __html: JSON.stringify(product, null, 2) }} /> */}
               </div>
             )}
           </div>
           
-          <div className="flex flex-col gap-6">
-            <h2 className="font-bold text-3xl">Relacionados</h2>
+          <div className="col-span-12">
+            <h2 className="font-bold text-3xl mb-3">Relacionados</h2>
+            <div className="flex gap-6 border-gray-200 overflow-auto">
 
-            {relateds.response.results.map((prod: ProductInterface) => (
-              <ProductCard key={prod.id} product={prod} />
-            ))}
+              {relateds.response.busy && [...new Array(10)].map((n, i) => (
+                <div
+                  key={i}
+                  className="rounded-lg overflow-hidden border mx-auto lg:mx-0 flex flex-col"
+                  style={{
+                    minWidth: 250,
+                    maxWidth: 250,
+                  }}
+                >
+                  <div className="bg-gray-200" style={{ minHeight: 200, maxHeight: 200 }}></div>
+                  <div className="grow">
+                    <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 mt-5 mx-2"></div>
+                    <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 mt-5 mx-4"></div>
+                  </div>
+                  <div className="bg-gray-200 dark:bg-gray-700 mt-4" style={{ minHeight: 50, maxHeight: 50 }}></div>
+                </div>
+              ))}
+
+              {relateds.response.results.map((prod: ProductInterface) => (
+                <div key={prod.id} style={{ maxWidth: 250 }} className="mx-auto lg:mx-0">
+                  <ProductCard product={prod} />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </main>

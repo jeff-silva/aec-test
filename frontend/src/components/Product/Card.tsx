@@ -4,6 +4,7 @@ import Link from 'next/link';
 
 import { CartContext, ProductInterface } from '@/contexts/CartContext';
 import useFormat from "@/hooks/useFormat";
+import InputQuantity from "@/components/Ui/InputQuantity";
 
 const ProductCard = ({
     product,
@@ -48,8 +49,8 @@ const ProductCard = ({
             <div className="grow text-green-500 font-bold">{format.money(product.price)}</div>
 
             {cartItem && (
-              <div className="grow flex gap-1 border p-1 rounded" style={{ maxWidth: 120 }}>
-                <input
+              <div className="grow flex border rounded-md overflow-hidden" style={{ maxWidth: 180 }}>
+                {/* <input
                   type="number"
                   className="w-full"
                   value={cartItem.quantity}
@@ -57,10 +58,21 @@ const ProductCard = ({
                     cartItem.quantity = +ev.target.value;
                     cart.itemUpdate(cartItem);
                   }}
+                /> */}
+
+                <InputQuantity
+                  className="w-full"
+                  min={1}
+                  max={10}
+                  value={cartItem.quantity}
+                  onInput={(value) => {
+                    cartItem.quantity = value;
+                    cart.itemUpdate(cartItem);
+                  }}
                 />
 
-                <button type="button" onClick={(ev) => cart.itemRemove(product)}>
-                  <Icon icon="material-symbols:delete-forever" height="23" className="text-red-900" />
+                <button type="button" className="bg-red-600 px-2" onClick={(ev) => cart.itemRemove(product)}>
+                  <Icon icon="material-symbols:delete-forever" height="23" className="text-white" />
                 </button>
               </div>
             )}
@@ -74,7 +86,7 @@ const ProductCard = ({
   return (
     <div
       key={product.id}
-      className="flex flex-col rounded-md border overflow-hidden"
+      className="flex flex-col rounded-md shadow-xl overflow-hidden"
       style={{
         height,
       }}
@@ -101,12 +113,23 @@ const ProductCard = ({
 
       {cartItem && (
         <div className="flex">
-          <input
+          {/* <input
             type="number"
             className="grow w-2/4 border-t px-3"
             value={cartItem.quantity}
             onChange={(ev) => {
               cartItem.quantity = +ev.target.value;
+              cart.itemUpdate(cartItem);
+            }}
+          /> */}
+
+          <InputQuantity
+            className="grow w-/4"
+            min={1}
+            max={10}
+            value={cartItem.quantity}
+            onInput={(value) => {
+              cartItem.quantity = value;
               cart.itemUpdate(cartItem);
             }}
           />
@@ -122,10 +145,10 @@ const ProductCard = ({
 
       {!cartItem && (
         <button
-          className="w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4"
+          className="w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 flex items-center justify-center gap-3"
           onClick={(ev) => cart.itemAdd(product)}
         >
-          <span>Add</span>
+          <Icon icon="tabler:shopping-bag-plus" height="24" />
         </button>
       )}
     </div>

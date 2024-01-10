@@ -10,6 +10,9 @@ import { Icon } from '@iconify/react';
 
 export default function Test() {
 
+  const listItemWidth = 200;
+  const listItemHeight = 200;
+
   const lists = [
     {
       title: 'Computadores',
@@ -54,7 +57,7 @@ export default function Test() {
   return (
     <>
       <Head>
-        <title>Test</title>
+        <title>Home</title>
       </Head>
 
       <main>
@@ -69,15 +72,32 @@ export default function Test() {
                 <div className="text-gray-600 text-3xl font-bold uppercase mb-2">{list.title}</div>
 
                 <div className="flex gap-3 overflow-auto mb-2">
-                  {list.request.response.results.map((prod: ProductInterface) => (
+                  {list.request.busy && [...new Array(10)].map((n, i) => (
+                    <div
+                      key={i}
+                      className="rounded-lg overflow-hidden border"
+                      style={{
+                        minWidth: listItemWidth,
+                        maxWidth: listItemWidth,
+                        height: listItemHeight,
+                      }}
+                    >
+                      <Icon icon="material-symbols:image-rounded" className="mx-auto text-gray-200" height="80" />
+                      <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 mt-5 mx-2"></div>
+                      <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 mt-5 mx-4"></div>
+                      <div className="h-20 bg-gray-200 dark:bg-gray-700 mt-4"></div>
+                    </div>
+                  ))}
+                  
+                  {!list.request.busy && list.request.response.results.map((prod: ProductInterface) => (
                     <div
                       key={prod.id}
                       style={{
-                        minWidth: 200,
-                        maxWidth: 200,
+                        minWidth: listItemWidth,
+                        maxWidth: listItemWidth,
                       }}
                     >
-                      <ProductCard product={prod} height="250px" />
+                      <ProductCard product={prod} height={listItemHeight+'px'} />
                     </div>
                   ))}
                 </div>

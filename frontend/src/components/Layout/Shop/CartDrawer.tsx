@@ -15,7 +15,6 @@ const ShopCartDrawer = ({ }) => {
     <div>
       <div
         style={{
-          background: '#00000011',
           position: 'fixed',
           top: 0,
           right: 0,
@@ -27,11 +26,26 @@ const ShopCartDrawer = ({ }) => {
           opacity: cart.drawer ? 1 : 0,
           transition: 'all 300ms ease',
         }}
-        onClick={(ev) => {
-          if (ev.currentTarget != ev.target) return;
-          cart.drawerToggle(false);
-        }}
       >
+        {/* Overlay */}
+        <div
+          className="opacity-25 bg-green-600"
+          style={{
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            width: '100%',
+            height: '100%',
+            cursor: 'pointer',
+            zIndex: 1,
+          }}
+          onClick={(ev) => {
+            if (ev.currentTarget != ev.target) return;
+            cart.drawerToggle(false);
+          }}
+        />
+
+        {/* Content */}
         <div
           className="bg-white shadow-2xl flex flex-col"
           style={{
@@ -43,10 +57,14 @@ const ShopCartDrawer = ({ }) => {
             maxWidth: '90vw',
             cursor: 'default',
             transition: 'all 300ms ease',
+            zIndex: 2,
           }}
         >
-          <div className="p-3 bg-gray-200 flex items-center">
-            <div className="grow">Carrinho</div>
+          <div className="p-3 bg-green-600 text-white flex items-center">
+            <div className="grow flex items-center gap-3">
+              <Icon icon="tabler:shopping-bag-plus" height="28" />
+              <span className="font-bold uppercase">Meu Carrinho</span>
+            </div>
             <button type="button" onClick={() => cart.drawerToggle()}>
               <Icon icon="material-symbols:close" />
             </button>

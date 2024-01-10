@@ -82,7 +82,7 @@ export default function Test() {
             
             {/* Search Results */}
             <div className="col-span-12 lg:col-span-3 mt-10 lg:mt-0">
-              <div className="grid grid-cols-1 lg:grid-cols-4 gap-3">
+              <div className="grid grid-cols-1 lg:grid-cols-4 gap-5">
 
                 {/* Skeleton */}
                 {products.busy && (

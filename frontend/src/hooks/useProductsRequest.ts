@@ -56,12 +56,13 @@ const useProductsRequest = (options:  { params?: OptionsParamsInterface } = {}) 
         params,
       });
 
-      data.results = data.results.map((prod: ProductInterface) => {
+      data.results = data.results.map((prod) => {
         return {
           id: prod.id,
           title: prod.title,
           price: prod.price,
           thumbnail: prod.thumbnail,
+          description: '',
         };
       });
 
