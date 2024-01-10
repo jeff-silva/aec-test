@@ -56,7 +56,7 @@ const useProductsRequest = (options:  { params?: OptionsParamsInterface } = {}) 
         params,
       });
 
-      data.results = data.results.map((prod) => {
+      data.results = data.results.map((prod: ProductInterface) => {
         return {
           id: prod.id,
           title: prod.title,

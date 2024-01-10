@@ -22,9 +22,9 @@ const useProductRequest = () => {
         if (!data[0].body.error) {
           let product = data[0].body;
 
-          let description = [];
+          let description: string[] = [];
 
-          product.attributes.map((attr) => {
+          product.attributes.map((attr: { values: any[]; name: any; }) => {
             const values = attr.values.map(value => value.name).join(', ');
             description.push(`<p>${attr.name}: ${values}</p>`);
           });

@@ -1,5 +1,16 @@
 import { Icon } from '@iconify/react';
 
+export interface InputQuantityInterface {
+  className?: string;
+  value?: number;
+  min?: number;
+  max?: number;
+  step?: number;
+  iconSub?: string;
+  iconAdd?: string;
+  onInput?: (value: number) => void;
+}
+
 const InputQuantity = ({
   className = "",
   value = 0,
@@ -9,7 +20,7 @@ const InputQuantity = ({
   iconSub = 'ic:outline-minus',
   iconAdd = 'ic:outline-add',
   onInput = (value: number) => null,
-}) => {
+}: InputQuantityInterface) => {
   const numberValid = (value: number) => {
     if (min && value < min) {
       value = min;

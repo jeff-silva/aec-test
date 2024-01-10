@@ -133,7 +133,7 @@ export default function Test() {
             <h2 className="font-bold text-3xl mb-3">Relacionados</h2>
             <div className="flex gap-6 border-gray-200 overflow-auto">
 
-              {relateds.response.busy && [...new Array(10)].map((n, i) => (
+              {relateds.busy && [...new Array(10)].map((n, i) => (
                 <div
                   key={i}
                   className="rounded-lg overflow-hidden border mx-auto lg:mx-0 flex flex-col"
@@ -151,7 +151,7 @@ export default function Test() {
                 </div>
               ))}
 
-              {relateds.response.results.map((prod: ProductInterface) => (
+              {!relateds.busy && relateds.response.results.map((prod: ProductInterface) => (
                 <div key={prod.id} style={{ maxWidth: 250 }} className="mx-auto lg:mx-0">
                   <ProductCard product={prod} />
                 </div>
