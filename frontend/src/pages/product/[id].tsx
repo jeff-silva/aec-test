@@ -50,7 +50,7 @@ export default function Test() {
   return (
     <>
       <Head>
-        <title>Produto</title>
+        <title>{product.response ? product.response.title : 'Produto não encontrado'}</title>
       </Head>
 
       <main className="container mx-auto">

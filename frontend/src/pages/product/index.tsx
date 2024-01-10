@@ -33,7 +33,7 @@ export default function Test() {
   return (
     <>
       <Head>
-        <title>Test</title>
+        <title>Pesquisar Produto</title>
       </Head>
 
       <main>

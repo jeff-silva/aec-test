@@ -57,7 +57,7 @@ export default function Test() {
   return (
     <>
       <Head>
-        <title>Produto</title>
+        <title>Finalizar Compra</title>
       </Head>
 
       <main className="container mx-auto">
