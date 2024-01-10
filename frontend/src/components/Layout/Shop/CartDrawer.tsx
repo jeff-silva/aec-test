@@ -74,7 +74,7 @@ const ShopCartDrawer = ({ }) => {
           </div>
 
           <div className="p-3 border-t flex items-center">
-            <div className="grow">
+            <div className="grow font-bold">
               Total: {format.money(cart.total)}
             </div>
 

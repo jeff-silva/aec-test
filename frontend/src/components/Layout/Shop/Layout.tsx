@@ -19,7 +19,7 @@ const ShopLayout = ({ children }: { children: React.ReactNode }) => {
           width: '100vw',
         }}
       >
-        <div className="container mx-auto py-3 flex items-center gap-3">
+        <div className="container mx-auto py-3 px-4 lg:px-0 flex items-center gap-3">
           <Link href="/">Home</Link>
 
           <div className="grow"></div>
@@ -34,7 +34,8 @@ const ShopLayout = ({ children }: { children: React.ReactNode }) => {
       </div>
 
       <main
-        style={{ marginTop: 100, minHeight: '85vh' }}
+        style={{ marginTop: 70, minHeight: '85vh' }}
+        className="px-4 lg:px-0"
       >
         {children}
       </main>
@@ -42,7 +43,7 @@ const ShopLayout = ({ children }: { children: React.ReactNode }) => {
       <br /><br />
 
       <div className="bg-gray-800 text-white">
-        <div className="container mx-auto py-6">
+        <div className="container mx-auto py-6 px-4 lg:px-0">
           &copy; 2024 - Todos os direitos reservados
         </div>
       </div>

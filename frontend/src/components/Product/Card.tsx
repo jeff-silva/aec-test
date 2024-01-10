@@ -5,7 +5,15 @@ import Link from 'next/link';
 import { CartContext, ProductInterface } from '@/contexts/CartContext';
 import useFormat from "@/hooks/useFormat";
 
-const ProductCard = ({ product, layout='vertical' }: { product: ProductInterface, layout?: string }) => {
+const ProductCard = ({
+    product,
+    layout = 'vertical',
+    height = '350px',
+  }: {
+    product: ProductInterface,
+    layout?: string,
+    height?: string,
+  }) => {
   const cart = useContext(CartContext);
   const cartItem = cart.itemFind(product);
   const format = useFormat();
@@ -66,11 +74,9 @@ const ProductCard = ({ product, layout='vertical' }: { product: ProductInterface
   return (
     <div
       key={product.id}
-      className="flex flex-col rounded border overflow-hidden"
+      className="flex flex-col rounded-md border overflow-hidden"
       style={{
-        // minWidth: '250px',
-        // maxWidth: '250px',
-        height: '350px',
+        height,
       }}
     >
       <Link

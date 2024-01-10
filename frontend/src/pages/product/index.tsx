@@ -4,7 +4,7 @@ import { useContext, useEffect } from 'react';
 import { Icon } from '@iconify/react';
 import { useRouter } from 'next/router';
 
-import { CartContext } from '@/contexts/CartContext';
+import { CartContext, ProductInterface } from '@/contexts/CartContext';
 import useProductsRequest from '@/hooks/useProductsRequest';
 import ProductCard from '@/components/Product/Card';
 
@@ -12,13 +12,24 @@ export default function Test() {
   const cart = useContext(CartContext);
   const router = useRouter();
   const products = useProductsRequest({
-    params: router.query,
+    params: { ...router.query },
   });
 
+  
   useEffect(() => {
-    // products.paramsUpdate(router.query);
-    products.submit();
-  }, [ router ]);
+    products.paramsUpdate({ ...router.query });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.query]);
+
+  useEffect(() => {
+    const t = setTimeout(() => {
+      products.submit();
+    }, 1000);
+
+    return () => clearTimeout(t);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ products.params ]);
 
   return (
     <>
@@ -31,10 +42,36 @@ export default function Test() {
 
         <div className="container mx-auto">
           <div className="grid grid-cols-4 gap-3">
+
+            {/* Search Filters */}
+            <div className="col-span-12 lg:col-span-1">
+              <form
+                onSubmit={(ev) => {
+                  ev.preventDefault();
+                  products.submit();
+                  router.push({ query: { ...products.params } });
+                }}
+              >
+                <div className="flex items-center border">
+                  <input
+                    type="text"
+                    className="grow p-3"
+                    value={products.params.q}
+                    onInput={(ev) => {
+                      const target = ev.target as HTMLInputElement;
+                      products.paramsUpdate({ q: target.value });
+                    }}
+                  />
+                  <button type="button" className="px-2">
+                    <Icon icon={ products.busy ? 'line-md:loading-loop' : 'material-symbols:search' } height="30" />
+                  </button>
+                </div>
+              </form>
+            </div>
             
             {/* Search Results */}
-            <div className="col-span-3">
-              <div className="grid grid-cols-4 gap-3">
+            <div className="col-span-12 lg:col-span-3">
+              <div className="grid grid-cols-1 lg:grid-cols-4 gap-3">
 
                 {/* Skeleton */}
                 {products.busy && (
@@ -60,7 +97,7 @@ export default function Test() {
                 )}
 
                 {/* Products List */}
-                {products.response.results.map((prod) => (
+                {products.response.results.map((prod: ProductInterface) => (
                   <ProductCard
                     key={prod.id}
                     product={prod}
@@ -68,38 +105,7 @@ export default function Test() {
                 ))}
               </div>
             </div>
-
-            {/* Search Filters */}
-            <div className="col-span-1">
-              <form
-                onSubmit={(ev) => {
-                  ev.preventDefault();
-                  products.submit();
-                  router.push({ query: products.params });
-                }}
-              >
-                <div className="flex items-center border">
-                  <input
-                    type="text"
-                    className="grow p-3"
-                    value={products.params.q}
-                    onInput={(ev) => {
-                      products.paramsUpdate({
-                        q: ev.target.value,
-                      });
-                    }}
-                  />
-                  <button type="button" className="px-2">
-                    <Icon icon={ products.busy ? 'line-md:loading-loop' : 'material-symbols:search' } height="30" />
-                  </button>
-                </div>
-              </form>
-
-              {/* <pre dangerouslySetInnerHTML={{ __html: JSON.stringify(products, null, 2) }} /> */}
-            </div>
-          </div>
-
-          
+          </div>          
 
           {/* <pre dangerouslySetInnerHTML={{ __html: JSON.stringify(cart, null, 2) }} /> */}
         </div>
