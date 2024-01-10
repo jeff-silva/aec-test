@@ -7,8 +7,8 @@ const useProductRequest = () => {
   const [busy, setBusy] = useState(false);
   const [response, setResponse] = useState<ProductInterface | null>(null);
 
-  const load = async (id: number | string | null = null) => {
-    if (!id) return;
+  const load = async (id: number | string | null = null): Promise<ProductInterface | null> => {
+    if (!id) return null;
     setBusy(true);
 
     try {
@@ -32,6 +32,8 @@ const useProductRequest = () => {
           return product;
         }
       }
+
+      return null;
     } catch (error) {
       setResponse(null);
     } finally {

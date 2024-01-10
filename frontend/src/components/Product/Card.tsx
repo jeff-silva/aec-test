@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { CartContext, ProductInterface } from '@/contexts/CartContext';
 import useFormat from "@/hooks/useFormat";
 
-const ProductCard = ({ product, layout='vertical' }: { product: ProductInterface, layout: string }) => {
+const ProductCard = ({ product, layout='vertical' }: { product: ProductInterface, layout?: string }) => {
   const cart = useContext(CartContext);
   const cartItem = cart.itemFind(product);
   const format = useFormat();

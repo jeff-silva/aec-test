@@ -9,7 +9,7 @@ import useFormat from '@/hooks/useFormat';
 import ProductCard from '@/components/Product/Card';
 import { CartContext } from '@/contexts/CartContext';
 
-import { CartItemInterface } from '@/contexts/CartContext';
+import { CartItemInterface, ProductInterface } from '@/contexts/CartContext';
 
 export default function Test() {
   const format = useFormat();
@@ -29,7 +29,8 @@ export default function Test() {
 
     (async () => {
       const productId = Array.isArray(router.query.id) ? router.query.id[0] : router.query.id;
-      const data = await product.load(productId);
+      const data: ProductInterface | null = await product.load(productId);
+      if (!data) return;
       setCartItem(cart.itemFind(data));
       relateds.paramsUpdate({ q: data.title });
     })();
@@ -80,6 +81,7 @@ export default function Test() {
                   type="button"
                   className="w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4"
                   onClick={() => {
+                    if (!product.response) return;
                     cart.itemAdd(product.response);
                     setCartItem(cart.itemFind(product.response));
                   }}
@@ -96,7 +98,8 @@ export default function Test() {
                       className="w-full p-2"
                       value={cartItem.quantity}
                       onInput={(ev) => {
-                        cartItem.quantity = parseInt(ev.target.value);
+                        const target = ev.target as HTMLInputElement;
+                        cartItem.quantity = +target.value;
                         cart.itemUpdate(cartItem);
                       }}
                     />
@@ -107,7 +110,7 @@ export default function Test() {
                     className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4"
                     onClick={async () => {
                       await cart.itemRemove(cartItem.product);
-                      setCartItem(false);
+                      setCartItem(null);
                     }}
                   >
                     Remover
@@ -126,7 +129,7 @@ export default function Test() {
         <div
           className="flex gap-3 overflow-auto"
         >
-          {relateds.response.results.map((prod) => (
+          {relateds.response.results.map((prod: ProductInterface) => (
             <div
               key={prod.id}
               style={{
