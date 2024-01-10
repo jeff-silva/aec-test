@@ -7,16 +7,15 @@ export interface OptionsInterface {
   params?: object;
 };
 
-const useProductsRequest = (options: OptionsInterface = {}) => {
-  options = {
-    params: {},
-    ...options
-  };
+export interface OptionsParamsInterface {
+  q: string;
+  limit: number;
+};
 
-  options.params = {
+const useProductsRequest = (options:  { params?: OptionsParamsInterface } = {}) => {
+  const optionsParamsDefault: OptionsParamsInterface = {
     q: '',
     limit: 20,
-    ...options.params
   };
 
   const responseDafault = {
@@ -29,8 +28,18 @@ const useProductsRequest = (options: OptionsInterface = {}) => {
     results: [],
   };
 
+  options = {
+    params: optionsParamsDefault,
+    ...options
+  };
+
+  options.params = {
+    ...optionsParamsDefault,
+    ...options.params
+  };
+
   const [busy, setBusy] = useState(false);
-  const [params, setParams] = useState<object>(options.params);
+  const [params, setParams] = useState<OptionsParamsInterface>(options.params);
   const [response, setResponse] = useState(responseDafault);
 
   const paramsUpdate = (paramsNew: object) => {

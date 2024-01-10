@@ -1,18 +1,17 @@
 import Head from 'next/head';
 
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Icon } from '@iconify/react';
 import { useRouter } from 'next/router';
 
-import { CartContext, ProductInterface } from '@/contexts/CartContext';
 import useProductsRequest from '@/hooks/useProductsRequest';
 import ProductCard from '@/components/Product/Card';
+import { ProductInterface } from '@/contexts/CartContext';
 
 export default function Test() {
-  const cart = useContext(CartContext);
   const router = useRouter();
   const products = useProductsRequest({
-    params: { ...router.query },
+    params: { q: '', limit: 20, ...router.query },
   });
 
   
