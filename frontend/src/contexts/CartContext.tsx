@@ -1,15 +1,23 @@
 import React, { createContext, useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 
-type CartProductProps = {
-  id: string,
-  title: string,
-  price: number,
+interface CartItemInterface {
+  quantity: number;
+  product: object;
 };
 
-const CartContext = createContext({
-  products: [],
+interface CartInterface {
+  drawer: boolean;
+  items: CartItemInterface[];
+  total: number;
+  drawerToggle: (value?: boolean) => void;
+};
+
+const CartContext = createContext<CartInterface>({
+  drawer: false,
+  items: [],
   total: 0,
+  drawerToggle: (value = false) => null,
 });
 
 const CartProvider = ({ children }: { children: React.ReactNode }) => {
@@ -17,7 +25,7 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [items, setItems] = useState([]);
   const [drawer, setDrawer] = useState(false);
 
-  const storageSave = (data) => {
+  const storageSave = (data: any[]) => {
     localStorage.setItem('cart-items', JSON.stringify(data));
   };
 
