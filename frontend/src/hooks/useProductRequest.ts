@@ -24,7 +24,6 @@ const useProductRequest = () => {
             title: product.title,
             price: product.price,
             thumbnail: product.thumbnail,
-            pictures: product.pictures,
           };
           setResponse(product);
           setBusy(false);

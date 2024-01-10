@@ -1,14 +1,22 @@
 import Head from 'next/head';
-import { useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import useProductRequest from '@/hooks/useProductRequest';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 
 import useProductsRequest from '@/hooks/useProductsRequest';
+import useFormat from '@/hooks/useFormat';
 import ProductCard from '@/components/Product/Card';
+import { CartContext } from '@/contexts/CartContext';
 
 export default function Test() {
+  const format = useFormat();
   const router = useRouter();
   const product = useProductRequest();
+  const productImageSize = 250;
+  
+  const cart = useContext(CartContext);
+  const [cartItem, setCartItem] = useState(null);
 
   const relateds = useProductsRequest({
     params: { q: 'Automóveis', limit: 6 },
@@ -20,6 +28,7 @@ export default function Test() {
 
     (async () => {
       const data = await product.load(router.query.id);
+      setCartItem(cart.itemFind(data));
       relateds.paramsUpdate({ q: data.title });
       relateds.submit();
     })();
@@ -32,21 +41,6 @@ export default function Test() {
       </Head>
 
       <main className="container mx-auto">
-        <div className="border p-4 max-w-sm w-full mx-auto">
-          <div className="animate-pulse flex space-x-4">
-            <div className="rounded-full bg-slate-200 h-10 w-10"></div>
-            <div className="flex-1 space-y-6 py-1">
-              <div className="h-2 bg-slate-200 rounded"></div>
-              <div className="space-y-3">
-                <div className="grid grid-cols-3 gap-4">
-                  <div className="h-2 bg-slate-200 rounded col-span-2"></div>
-                  <div className="h-2 bg-slate-200 rounded col-span-1"></div>
-                </div>
-                <div className="h-2 bg-slate-200 rounded"></div>
-              </div>
-            </div>
-          </div>
-        </div>
 
         {!product.busy && !product.response && (
           <div>Produto não encontrado</div>
@@ -54,14 +48,68 @@ export default function Test() {
         
         {!product.busy && product.response && (
           <div>
-            <h1>{product.response.title}</h1>
+            <h1 className="font-bold text-3xl">{product.response.title}</h1>
+            <h1 className="font-bold text-2xl text-green-600">{format.money(product.response.price)}</h1>
+            <br />
+
+            <div className="border rounded-md overflow-hidden" style={{ maxWidth: productImageSize }}>
+              <div
+                style={{
+                  minWidth: productImageSize,
+                  maxWidth: productImageSize,
+                  height: productImageSize,
+                  background: `url(${product.response.thumbnail}) center center no-repeat`,
+                }}
+              />
+
+              {!cartItem && (
+                <button
+                  type="button"
+                  className="w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4"
+                  onClick={() => {
+                    cart.itemAdd(product.response);
+                    setCartItem(cart.itemFind(product.response));
+                  }}
+                >
+                  Adicionar ao carrinho
+                </button>
+              )}
+              
+              {cartItem && (
+                <div className="flex border-t">
+                  <div className="grow">
+                    <input
+                      type="number"
+                      className="w-full p-2"
+                      value={cartItem.quantity}
+                      onInput={(ev) => {
+                        cartItem.quantity = parseInt(ev.target.value);
+                        cart.itemUpdate(cartItem);
+                      }}
+                    />
+                  </div>
+
+                  <button
+                    type="button"
+                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4"
+                    onClick={async () => {
+                      await cart.itemRemove(cartItem.product);
+                      setCartItem(false);
+                    }}
+                  >
+                    Remover
+                  </button>
+                </div>
+              )}
+            </div>
             
-            {/* <pre dangerouslySetInnerHTML={{ __html: JSON.stringify(relateds, null, 2) }} /> */}
+            {/* <pre dangerouslySetInnerHTML={{ __html: JSON.stringify(cartItem, null, 2) }} /> */}
           </div>
         )}
 
         <br />
-        <h2 className="font-bold mb-3">Relacionados</h2>
+        <h2 className="text-2xl font-bold mb-3">Relacionados</h2>
+
         <div
           className="flex gap-3 overflow-auto"
         >
@@ -77,8 +125,6 @@ export default function Test() {
             </div>
           ))}
         </div>
-
-        <pre dangerouslySetInnerHTML={{ __html: JSON.stringify(product, null, 2) }} />
       </main>
     </>
   );

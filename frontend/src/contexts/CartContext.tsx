@@ -27,7 +27,8 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
     }, 0));
   };
 
-  const itemFind = (product) => {
+  const itemFind = (product = false) => {
+    if (!product) return null;
     return items.find(o => o.product.id == product.id);
   };
 

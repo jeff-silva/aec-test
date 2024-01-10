@@ -52,7 +52,6 @@ const useProductsRequest = (options = {}) => {
           title: prod.title,
           price: prod.price,
           thumbnail: prod.thumbnail,
-          pictures: prod.pictures,
         };
       });
 

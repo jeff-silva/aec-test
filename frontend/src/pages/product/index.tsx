@@ -90,12 +90,12 @@ export default function Test() {
                     }}
                   />
                   <button type="button" className="px-2">
-                    <Icon icon="material-symbols:search" height="30" />
+                    <Icon icon={ products.busy ? 'line-md:loading-loop' : 'material-symbols:search' } height="30" />
                   </button>
                 </div>
               </form>
 
-              <pre dangerouslySetInnerHTML={{ __html: JSON.stringify(products, null, 2) }} />
+              {/* <pre dangerouslySetInnerHTML={{ __html: JSON.stringify(products, null, 2) }} /> */}
             </div>
           </div>
 
