@@ -14,10 +14,17 @@ export interface CartItemInterface {
 };
 
 export interface CartInterface {
-  drawer: boolean;
+  drawer: boolean | null;
   items: CartItemInterface[];
   total: number;
   drawerToggle: (value?: boolean) => void;
+  setTotal: (value: number) => void;
+  setItems: (value: CartItemInterface[]) => void;
+  itemFind: (product: ProductInterface) => CartItemInterface | undefined;
+  itemUpdate: (product: CartItemInterface) => void;
+  itemAdd: (product: ProductInterface, quantity: number) => void;
+  itemRemove: (product: ProductInterface) => void;
+  itemsClear: () => void;
 };
 
 const CartContext = createContext<CartInterface>({
@@ -25,25 +32,31 @@ const CartContext = createContext<CartInterface>({
   items: [],
   total: 0,
   drawerToggle: (value = false) => null,
+  setTotal: (value: number) => null,
+  setItems: (value: CartItemInterface[]) => null,
+  itemFind: (product: ProductInterface) => undefined,
+  itemUpdate: (product: CartItemInterface) => null,
+  itemAdd: (product: ProductInterface, quantity: number) => null,
+  itemRemove: (product: ProductInterface) => null,
+  itemsClear: () => null,
 });
 
 const CartProvider = ({ children }: { children: React.ReactNode }) => {
-  const [total, setTotal] = useState(0);
-  const [items, setItems] = useState([]);
-  const [drawer, setDrawer] = useState(false);
+  const [total, setTotal] = useState<number>(0);
+  const [items, setItems] = useState<CartItemInterface[]>([]);
+  const [drawer, setDrawer] = useState<boolean | null>(null);
 
   const storageSave = (data: any[]) => {
     localStorage.setItem('cart-items', JSON.stringify(data));
   };
 
-  const totalUpdate = (items = []) => {
+  const totalUpdate = (items: CartItemInterface[] = []) => {
     setTotal(items.reduce((total, o: CartItemInterface) => {
       return total + (o.product.price * o.quantity);
     }, 0));
   };
 
-  const itemFind = (product: ProductInterface | false = false) => {
-    if (!product) return null;
+  const itemFind = (product: ProductInterface) => {
     return items.find((o: CartItemInterface) => {
       return o.product.id == product.id;
     });
@@ -61,12 +74,12 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
     totalUpdate(itemsNew);
   };
 
-  const itemAdd = (product, quantity=1) => {
+  const itemAdd = (product: ProductInterface, quantity: number = 1) => {
     if (!itemFind(product)) {
       items.unshift({ quantity: 0, product });
     }
 
-    const itemsNew = items.map(item => {
+    const itemsNew: CartItemInterface[] = items.map((item: CartItemInterface) => {
       if (item.product.id != product.id) return item;
       item.quantity += quantity;
       return item;
@@ -78,7 +91,7 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
     setDrawer(true);
   };
 
-  const itemRemove = async (product) => {
+  const itemRemove = async (product: ProductInterface) => {
     const resp = await Swal.fire({
       icon: "warning",
       html: `Confirmar remoção de <strong>${product.title}</strong>?`,
@@ -107,7 +120,7 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
     totalUpdate([]);
   };
 
-  const drawerToggle = (value=null) => {
+  const drawerToggle = (value: boolean | null = null) => {
     setDrawer(value===null ? !drawer : value);
   };
 

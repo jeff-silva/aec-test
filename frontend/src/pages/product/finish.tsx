@@ -4,14 +4,16 @@ import { useContext } from 'react';
 import Swal from 'sweetalert2';
 
 import ProductCard from '@/components/Product/Card';
+import useFormat from '@/hooks/useFormat';
 
 export default function Test() {
   const cart = useContext(CartContext);
+  const format = useFormat();
 
   const cartFinalize = async () => {
     const resp = await Swal.fire({
       icon: "warning",
-      html: `Confirmar sua compra?`,
+      html: `Confirmar sua compra no valor de <br /><strong>${format.money(cart.total)}</strong>?`,
       confirmButtonText: 'Confirmar',
       showCancelButton: true,
       cancelButtonText: 'Cancelar',
@@ -52,6 +54,10 @@ export default function Test() {
                 <ProductCard product={item.product} layout="horizontal" />
               </div>
             ))}
+
+            <div className="text-green-600 font-bold text-4xl text-end">
+              {format.money(cart.total)}
+            </div>
           </div>
 
           <div className="">
