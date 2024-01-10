@@ -16,4 +16,6 @@ yarn install
 yarn dev
 ```
 
-[Acesse a Demo](https://jeff-silva.github.io/aec-test)
+Após iniciar, estará disponível em http://localhost:3000/aec-test
+
+[Demo Online](https://jeff-silva.github.io/aec-test)

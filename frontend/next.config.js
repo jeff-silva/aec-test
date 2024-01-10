@@ -2,7 +2,7 @@
 const nextConfig = {
     output: 'export',
     reactStrictMode: true,
-    basePath: '/next-react-test',
+    basePath: '/aec-test',
 }
 
 module.exports = nextConfig
