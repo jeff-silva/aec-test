@@ -22,7 +22,7 @@ export interface CartInterface {
   setItems: (value: CartItemInterface[]) => void;
   itemFind: (product: ProductInterface) => CartItemInterface | undefined;
   itemUpdate: (product: CartItemInterface) => void;
-  itemAdd: (product: ProductInterface, quantity: number) => void;
+  itemAdd: (product: ProductInterface, quantity?: number) => void;
   itemRemove: (product: ProductInterface) => void;
   itemsClear: () => void;
 };
@@ -36,7 +36,7 @@ const CartContext = createContext<CartInterface>({
   setItems: (value: CartItemInterface[]) => null,
   itemFind: (product: ProductInterface) => undefined,
   itemUpdate: (product: CartItemInterface) => null,
-  itemAdd: (product: ProductInterface, quantity: number) => null,
+  itemAdd: (product: ProductInterface, quantity?: number) => null,
   itemRemove: (product: ProductInterface) => null,
   itemsClear: () => null,
 });

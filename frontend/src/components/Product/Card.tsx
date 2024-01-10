@@ -2,10 +2,10 @@ import React, { useContext } from "react";
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
 
-import { CartContext } from '@/contexts/CartContext';
+import { CartContext, ProductInterface } from '@/contexts/CartContext';
 import useFormat from "@/hooks/useFormat";
 
-const ProductCard = ({ product, layout='vertical' }) => {
+const ProductCard = ({ product, layout='vertical' }: { product: ProductInterface, layout: string }) => {
   const cart = useContext(CartContext);
   const cartItem = cart.itemFind(product);
   const format = useFormat();
@@ -46,7 +46,7 @@ const ProductCard = ({ product, layout='vertical' }) => {
                   className="w-full"
                   value={cartItem.quantity}
                   onChange={(ev) => {
-                    cartItem.quantity = ev.target.value;
+                    cartItem.quantity = +ev.target.value;
                     cart.itemUpdate(cartItem);
                   }}
                 />
@@ -100,7 +100,7 @@ const ProductCard = ({ product, layout='vertical' }) => {
             className="grow w-2/4 border-t px-3"
             value={cartItem.quantity}
             onChange={(ev) => {
-              cartItem.quantity = ev.target.value;
+              cartItem.quantity = +ev.target.value;
               cart.itemUpdate(cartItem);
             }}
           />
