@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const useProductRequest = () => {
   const [busy, setBusy] = useState(false);
-  const [response, setResponse] = useState(false);
+  const [response, setResponse] = useState<object | boolean>(false);
 
   const load = async (id = null) => {
     if (!id) return;
@@ -35,6 +35,8 @@ const useProductRequest = () => {
     } finally {
       setBusy(false);
     }
+
+    return false;
   };
 
   return {

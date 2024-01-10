@@ -1,7 +1,13 @@
 import { useState } from 'react';
 import axios from 'axios';
 
-const useProductsRequest = (options = {}) => {
+import { ProductInterface } from '@/contexts/CartContext';
+
+export interface OptionsInterface {
+  params?: object;
+};
+
+const useProductsRequest = (options: OptionsInterface = {}) => {
   options = {
     params: {},
     ...options
@@ -24,16 +30,11 @@ const useProductsRequest = (options = {}) => {
   };
 
   const [busy, setBusy] = useState(false);
-  const [params, setParams] = useState({ ...options.params });
-
+  const [params, setParams] = useState<object>(options.params);
   const [response, setResponse] = useState(responseDafault);
 
-  const paramsUpdate = (paramsNew) => {
-    for(let attr in paramsNew) {
-      params[attr] = paramsNew[attr];
-    }
-
-    setParams({ ...params });
+  const paramsUpdate = (paramsNew: object) => {
+    setParams((paramsOld) => ({ ...paramsOld, ...paramsNew }));
   };
 
   const submit = async () => {
@@ -46,7 +47,7 @@ const useProductsRequest = (options = {}) => {
         params,
       });
 
-      data.results = data.results.map((prod) => {
+      data.results = data.results.map((prod: ProductInterface) => {
         return {
           id: prod.id,
           title: prod.title,

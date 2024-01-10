@@ -6,7 +6,7 @@ export interface ProductInterface {
   title: string;
   price: number;
   thumbnail: string;
-}
+};
 
 export interface CartItemInterface {
   quantity: number;

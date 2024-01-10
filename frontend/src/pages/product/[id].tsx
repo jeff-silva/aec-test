@@ -22,7 +22,6 @@ export default function Test() {
     params: { q: 'Automóveis', limit: 6 },
   });
 
-  
   useEffect(() => {
     if (!router.query.id) return;
 
@@ -30,9 +29,18 @@ export default function Test() {
       const data = await product.load(router.query.id);
       setCartItem(cart.itemFind(data));
       relateds.paramsUpdate({ q: data.title });
-      relateds.submit();
     })();
-  }, [router, router.query]);
+  }, [router.query]);
+  
+  useEffect(() => {
+    let t = setTimeout(() => {
+      relateds.submit();
+    }, 1000);
+
+    return () => {
+      clearTimeout(t);
+    }
+  }, [relateds.params]);
 
   return (
     <>
