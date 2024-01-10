@@ -20,28 +20,28 @@ export interface CartInterface {
   drawerToggle: (value?: boolean) => void;
   setTotal: (value: number) => void;
   setItems: (value: CartItemInterface[]) => void;
-  itemFind: (product: ProductInterface) => CartItemInterface | undefined;
+  itemFind: (product: ProductInterface) => CartItemInterface | null;
   itemUpdate: (product: CartItemInterface) => void;
   itemAdd: (product: ProductInterface, quantity?: number) => void;
   itemRemove: (product: ProductInterface) => void;
   itemsClear: () => void;
 };
 
-const CartContext = createContext<CartInterface>({
+export const CartContext = createContext<CartInterface>({
   drawer: false,
   items: [],
   total: 0,
   drawerToggle: (value = false) => null,
   setTotal: (value: number) => null,
   setItems: (value: CartItemInterface[]) => null,
-  itemFind: (product: ProductInterface) => undefined,
+  itemFind: (product: ProductInterface) => null,
   itemUpdate: (product: CartItemInterface) => null,
   itemAdd: (product: ProductInterface, quantity?: number) => null,
   itemRemove: (product: ProductInterface) => null,
   itemsClear: () => null,
 });
 
-const CartProvider = ({ children }: { children: React.ReactNode }) => {
+export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [total, setTotal] = useState<number>(0);
   const [items, setItems] = useState<CartItemInterface[]>([]);
   const [drawer, setDrawer] = useState<boolean | null>(null);
@@ -59,7 +59,7 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const itemFind = (product: ProductInterface) => {
     return items.find((o: CartItemInterface) => {
       return o.product.id == product.id;
-    });
+    }) || null;
   };
 
   const itemUpdate = (item: CartItemInterface) => {
@@ -148,6 +148,3 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
     </CartContext.Provider>
   );
 };
-
-
-export { CartContext, CartProvider };

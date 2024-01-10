@@ -9,6 +9,8 @@ import useFormat from '@/hooks/useFormat';
 import ProductCard from '@/components/Product/Card';
 import { CartContext } from '@/contexts/CartContext';
 
+import { CartItemInterface } from '@/contexts/CartContext';
+
 export default function Test() {
   const format = useFormat();
   const router = useRouter();
@@ -16,7 +18,7 @@ export default function Test() {
   const productImageSize = 250;
   
   const cart = useContext(CartContext);
-  const [cartItem, setCartItem] = useState(null);
+  const [cartItem, setCartItem] = useState<CartItemInterface | null >(null);
 
   const relateds = useProductsRequest({
     params: { q: 'Automóveis', limit: 6 },
@@ -26,10 +28,12 @@ export default function Test() {
     if (!router.query.id) return;
 
     (async () => {
-      const data = await product.load(router.query.id);
+      const productId = Array.isArray(router.query.id) ? router.query.id[0] : router.query.id;
+      const data = await product.load(productId);
       setCartItem(cart.itemFind(data));
       relateds.paramsUpdate({ q: data.title });
     })();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.query]);
   
   useEffect(() => {
@@ -40,6 +44,7 @@ export default function Test() {
     return () => {
       clearTimeout(t);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [relateds.params]);
 
   return (

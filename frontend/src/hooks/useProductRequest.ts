@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import axios from 'axios';
 
+import { ProductInterface } from '@/contexts/CartContext';
+
 const useProductRequest = () => {
   const [busy, setBusy] = useState(false);
-  const [response, setResponse] = useState<object | boolean>(false);
+  const [response, setResponse] = useState<ProductInterface | null>(null);
 
-  const load = async (id = null) => {
+  const load = async (id: number | string | null = null) => {
     if (!id) return;
     setBusy(true);
 
@@ -17,8 +19,8 @@ const useProductRequest = () => {
       });
 
       if (typeof data[0] != 'undefined') {
-        let product = data[0].body;
-        if (!product.error) {
+        if (!data[0].body.error) {
+          let product: ProductInterface = data[0].body;
           product = {
             id: product.id,
             title: product.title,
@@ -31,12 +33,12 @@ const useProductRequest = () => {
         }
       }
     } catch (error) {
-      setResponse({});
+      setResponse(null);
     } finally {
       setBusy(false);
     }
 
-    return false;
+    return null;
   };
 
   return {
