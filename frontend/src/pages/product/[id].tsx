@@ -21,7 +21,7 @@ export default function Test() {
   const [cartItem, setCartItem] = useState<CartItemInterface | null >(null);
 
   const relateds = useProductsRequest({
-    params: { q: 'Automóveis', limit: 6 },
+    params: { q: 'Automóveis', limit: 3 },
   });
 
   useEffect(() => {
@@ -56,90 +56,83 @@ export default function Test() {
 
       <main className="container mx-auto">
 
-        {!product.busy && !product.response && (
-          <div>Produto não encontrado</div>
-        )}
-        
-        {!product.busy && product.response && (
-          <div>
-            <h1 className="font-bold text-3xl">{product.response.title}</h1>
-            <h1 className="font-bold text-2xl text-green-600">{format.money(product.response.price)}</h1>
-            <br />
-
-            <div className="border rounded-md overflow-hidden" style={{ maxWidth: productImageSize }}>
-              <div
-                style={{
-                  minWidth: productImageSize,
-                  maxWidth: productImageSize,
-                  height: productImageSize,
-                  background: `url(${product.response.thumbnail}) center center no-repeat`,
-                }}
-              />
-
-              {!cartItem && (
-                <button
-                  type="button"
-                  className="w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4"
-                  onClick={() => {
-                    if (!product.response) return;
-                    cart.itemAdd(product.response);
-                    setCartItem(cart.itemFind(product.response));
-                  }}
-                >
-                  Adicionar ao carrinho
-                </button>
-              )}
-              
-              {cartItem && (
-                <div className="flex border-t">
-                  <div className="grow">
-                    <input
-                      type="number"
-                      className="w-full p-2"
-                      value={cartItem.quantity}
-                      onInput={(ev) => {
-                        const target = ev.target as HTMLInputElement;
-                        cartItem.quantity = +target.value;
-                        cart.itemUpdate(cartItem);
-                      }}
-                    />
-                  </div>
-
-                  <button
-                    type="button"
-                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4"
-                    onClick={async () => {
-                      await cart.itemRemove(cartItem.product);
-                      setCartItem(null);
-                    }}
-                  >
-                    Remover
-                  </button>
-                </div>
-              )}
-            </div>
+        <div className="grid grid-cols-5 gap-3">
+          <div className="col-span-4">
+            {!product.busy && !product.response && (
+              <div>Produto não encontrado</div>
+            )}
             
-            {/* <pre dangerouslySetInnerHTML={{ __html: JSON.stringify(cartItem, null, 2) }} /> */}
+            {!product.busy && product.response && (
+              <div>
+                <h1 className="font-bold text-3xl">{product.response.title}</h1>
+                <h1 className="font-bold text-2xl text-green-600">{format.money(product.response.price)}</h1>
+                <br />
+
+                <div className="border rounded-md overflow-hidden" style={{ maxWidth: productImageSize }}>
+                  <div
+                    style={{
+                      minWidth: productImageSize,
+                      maxWidth: productImageSize,
+                      height: productImageSize,
+                      background: `url(${product.response.thumbnail}) center center no-repeat`,
+                    }}
+                  />
+
+                  {!cartItem && (
+                    <button
+                      type="button"
+                      className="w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4"
+                      onClick={() => {
+                        if (!product.response) return;
+                        cart.itemAdd(product.response);
+                        setCartItem(cart.itemFind(product.response));
+                      }}
+                    >
+                      Adicionar ao carrinho
+                    </button>
+                  )}
+                  
+                  {cartItem && (
+                    <div className="flex border-t">
+                      <div className="grow">
+                        <input
+                          type="number"
+                          className="w-full p-2"
+                          value={cartItem.quantity}
+                          onInput={(ev) => {
+                            const target = ev.target as HTMLInputElement;
+                            cartItem.quantity = +target.value;
+                            cart.itemUpdate(cartItem);
+                          }}
+                        />
+                      </div>
+
+                      <button
+                        type="button"
+                        className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4"
+                        onClick={async () => {
+                          await cart.itemRemove(cartItem.product);
+                          setCartItem(null);
+                        }}
+                      >
+                        Remover
+                      </button>
+                    </div>
+                  )}
+                </div>
+                
+                {/* <pre dangerouslySetInnerHTML={{ __html: JSON.stringify(cartItem, null, 2) }} /> */}
+              </div>
+            )}
           </div>
-        )}
+          
+          <div className="flex flex-col gap-6">
+            <h2 className="font-bold text-3xl">Relacionados</h2>
 
-        <br />
-        <h2 className="text-2xl font-bold mb-3">Relacionados</h2>
-
-        <div
-          className="flex gap-3 overflow-auto"
-        >
-          {relateds.response.results.map((prod: ProductInterface) => (
-            <div
-              key={prod.id}
-              style={{
-                minWidth: 250,
-                maxWidth: 250,
-              }}
-            >
-              <ProductCard product={prod} />
-            </div>
-          ))}
+            {relateds.response.results.map((prod: ProductInterface) => (
+              <ProductCard key={prod.id} product={prod} />
+            ))}
+          </div>
         </div>
       </main>
     </>

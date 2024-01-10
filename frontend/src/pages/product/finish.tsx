@@ -11,6 +11,20 @@ export default function Test() {
   const format = useFormat();
 
   const cartFinalize = async () => {
+    if (cart.items.length === 0) {
+      return Swal.fire({
+        icon: "error",
+        html: `Seu carrinho está vazio`,
+        confirmButtonText: 'Ok',
+        buttonsStyling: false,
+        customClass: {
+          confirmButton: 'font-bold mx-1 py-2 px-4 rounded text-white bg-green-500 hover:bg-green-700',
+        },
+      });
+    }
+  
+   
+
     const resp = await Swal.fire({
       icon: "warning",
       html: `Confirmar sua compra no valor de <br /><strong>${format.money(cart.total)}</strong>?`,
@@ -47,20 +61,24 @@ export default function Test() {
       </Head>
 
       <main className="container mx-auto">
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="flex flex-col gap-3">
+            <div className="font-bold">
+              Dados do pedido
+            </div>
+
             {cart.items.map((item) => (
               <div key={item.product.id} className="border px-3 rounded-md">
                 <ProductCard product={item.product} layout="horizontal" />
               </div>
             ))}
 
-            <div className="text-green-600 font-bold text-4xl text-end">
-              {format.money(cart.total)}
+            <div className="text-green-700 font-bold text-4xl text-center bg-green-200 py-3 rounded-md">
+              Total: {format.money(cart.total)}
             </div>
           </div>
 
-          <div className="">
+          <div className="mt-6 lg:mt-0">
             <div className="grid grid-cols-12 gap-3">
               <div className="col-span-12 font-bold">
                 Dados do comprador

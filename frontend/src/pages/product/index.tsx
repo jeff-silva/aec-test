@@ -9,18 +9,18 @@ import ProductCard from '@/components/Product/Card';
 import { ProductInterface } from '@/contexts/CartContext';
 
 export default function Test() {
+  const maxWidth = 300;
   const router = useRouter();
   const products = useProductsRequest({
     params: { q: '', limit: 20, ...router.query },
   });
-
   
   useEffect(() => {
     products.paramsUpdate({ ...router.query });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.query]);
 
-  useEffect(() => {
+  useEffect(() => {   
     const t = setTimeout(() => {
       products.submit();
     }, 1000);
@@ -43,11 +43,13 @@ export default function Test() {
           <div className="grid grid-cols-4 gap-3">
 
             {/* Search Filters */}
-            <div className="col-span-12 lg:col-span-1">
+            <div
+              className="col-span-12 lg:col-span-1"
+            >
               <form
+                className="lg:sticky lg:top-20 mx-auto lg:mx-0"
                 onSubmit={(ev) => {
                   ev.preventDefault();
-                  products.submit();
                   router.push({ query: { ...products.params } });
                 }}
               >
@@ -61,13 +63,11 @@ export default function Test() {
                       products.paramsUpdate({ q: target.value });
                     }}
                   />
-                  <button type="button" className="px-2">
+                  <button type="submit" className="px-2">
                     <Icon icon={ products.busy ? 'line-md:loading-loop' : 'material-symbols:search' } height="30" />
                   </button>
                 </div>
 
-                <div className="h-12 bg-gray-200 rounded mt-4"></div>
-                <div className="h-12 bg-gray-200 rounded mt-4"></div>
                 <div className="h-12 bg-gray-200 rounded mt-4"></div>
                 <div className="h-12 bg-gray-200 rounded mt-4"></div>
 
@@ -81,13 +81,13 @@ export default function Test() {
             </div>
             
             {/* Search Results */}
-            <div className="col-span-12 lg:col-span-3">
+            <div className="col-span-12 lg:col-span-3 mt-10 lg:mt-0">
               <div className="grid grid-cols-1 lg:grid-cols-4 gap-3">
 
                 {/* Skeleton */}
                 {products.busy && (
                   <>
-                    {[...new Array(6)].map((n, i) => (
+                    {[...new Array(8)].map((n, i) => (
                       <div
                         key={i}
                         className="border p-3 animate-pulse"
@@ -108,11 +108,14 @@ export default function Test() {
                 )}
 
                 {/* Products List */}
-                {products.response.results.map((prod: ProductInterface) => (
-                  <ProductCard
+                {!products.busy && products.response.results.map((prod: ProductInterface) => (
+                  <div
                     key={prod.id}
-                    product={prod}
-                  />
+                    style={{ maxWidth }}
+                    className="mx-auto lg:mx-0"
+                  >
+                    <ProductCard product={prod} />
+                  </div>
                 ))}
               </div>
             </div>
