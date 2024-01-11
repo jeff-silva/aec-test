@@ -10,8 +10,8 @@ yarn dev
 Sem Docker:
 
 ```bash
+cp .env_example ./frontend/.env
 cd frontend
-cp .env_example .env
 yarn install
 yarn dev
 ```
