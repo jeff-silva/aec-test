@@ -3,8 +3,8 @@ import { Icon } from '@iconify/react';
 export interface InputQuantityInterface {
   className?: string;
   value?: number;
-  min?: number;
-  max?: number;
+  min?: number | undefined;
+  max?: number | undefined;
   step?: number;
   iconSub?: string;
   iconAdd?: string;
@@ -14,8 +14,8 @@ export interface InputQuantityInterface {
 const InputQuantity = ({
   className = "",
   value = 0,
-  min = Infinity,
-  max = Infinity,
+  min = undefined,
+  max = undefined,
   step = 1,
   iconSub = 'ic:outline-minus',
   iconAdd = 'ic:outline-add',

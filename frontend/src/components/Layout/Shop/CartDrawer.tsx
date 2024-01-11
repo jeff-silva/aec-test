@@ -29,7 +29,7 @@ const ShopCartDrawer = ({ }) => {
       >
         {/* Overlay */}
         <div
-          className="opacity-25 bg-green-600"
+          className="opacity-25 bg-black"
           style={{
             position: 'absolute',
             top: 0,
